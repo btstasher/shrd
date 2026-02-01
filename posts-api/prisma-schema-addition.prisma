@@ -1,0 +1,35 @@
+// Add this to your existing prisma/schema.prisma file
+// ================================================
+
+model Post {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Content
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  excerpt     String?
+  
+  // Status
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  
+  // Source tracking (from shrd)
+  sourceUrl      String?
+  sourcePlatform String?
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  @@index([status])
+  @@index([publishedAt])
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}

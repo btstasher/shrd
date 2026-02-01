@@ -1,0 +1,387 @@
+{
+  "project": "shrd",
+  "version": "0.1.0",
+  "created": "2026-02-01",
+  
+  "milestones": [
+    {
+      "id": "M0",
+      "name": "Foundation",
+      "description": "Project setup, core infrastructure",
+      "status": "pending",
+      "prds": ["PRD-001"]
+    },
+    {
+      "id": "M1",
+      "name": "MVP - YouTube + Articles",
+      "description": "Working CLI that handles YouTube videos and web articles",
+      "status": "pending",
+      "prds": ["PRD-002", "PRD-003", "PRD-004"]
+    },
+    {
+      "id": "M2",
+      "name": "Audio Support",
+      "description": "Whisper integration for podcasts and videos without transcripts",
+      "status": "pending",
+      "prds": ["PRD-005"]
+    },
+    {
+      "id": "M3",
+      "name": "Social Platforms",
+      "description": "Twitter, TikTok, Instagram support",
+      "status": "pending",
+      "prds": ["PRD-006", "PRD-007"]
+    },
+    {
+      "id": "M4",
+      "name": "Web App",
+      "description": "shrd.co web interface",
+      "status": "future",
+      "prds": ["PRD-008"]
+    }
+  ],
+
+  "prds": [
+    {
+      "id": "PRD-001",
+      "milestone": "M0",
+      "title": "Project Setup & CLI Skeleton",
+      "priority": "P0",
+      "estimate": "2 hours",
+      "status": "pending",
+      "stories": [
+        {
+          "id": "S001",
+          "title": "Initialize TypeScript project",
+          "tasks": [
+            "Create package.json with dependencies",
+            "Configure tsconfig.json",
+            "Set up bin/shrd entry point",
+            "Add Commander.js CLI skeleton"
+          ],
+          "acceptance": [
+            "Can run `shrd --help`",
+            "TypeScript compiles without errors"
+          ]
+        },
+        {
+          "id": "S002",
+          "title": "Create URL router module",
+          "tasks": [
+            "Implement URL pattern matching",
+            "Return platform type and extracted IDs",
+            "Handle edge cases (mobile URLs, shortened URLs)"
+          ],
+          "acceptance": [
+            "Correctly identifies YouTube, Twitter, TikTok, Instagram, article URLs",
+            "Extracts video IDs from various URL formats"
+          ]
+        },
+        {
+          "id": "S003",
+          "title": "Create shared types and interfaces",
+          "tasks": [
+            "Define ExtractedContent interface",
+            "Define NormalizedContent interface",
+            "Define GeneratedBlog interface",
+            "Define config types"
+          ],
+          "acceptance": [
+            "All modules use shared types",
+            "Types are exported for external use"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-002",
+      "milestone": "M1",
+      "title": "YouTube Extractor",
+      "priority": "P0",
+      "estimate": "3 hours",
+      "status": "pending",
+      "dependencies": ["PRD-001"],
+      "stories": [
+        {
+          "id": "S004",
+          "title": "Implement YouTube extraction",
+          "tasks": [
+            "Call yt-dlp with cookies for metadata",
+            "Extract title, channel, duration, description",
+            "Fetch transcript (auto-captions or manual)",
+            "Extract links from description",
+            "Generate embed code"
+          ],
+          "acceptance": [
+            "Extracts all metadata from YouTube URL",
+            "Returns transcript if available",
+            "Handles private/unavailable videos gracefully"
+          ]
+        },
+        {
+          "id": "S005",
+          "title": "Parse timestamps from description",
+          "tasks": [
+            "Detect timestamp patterns (00:00, 0:00:00)",
+            "Extract timestamp labels",
+            "Map timestamps to transcript sections"
+          ],
+          "acceptance": [
+            "Timestamps extracted and structured",
+            "Can segment transcript by timestamps"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-003",
+      "milestone": "M1",
+      "title": "Article Extractor",
+      "priority": "P0",
+      "estimate": "2 hours",
+      "status": "pending",
+      "dependencies": ["PRD-001"],
+      "stories": [
+        {
+          "id": "S006",
+          "title": "Implement article extraction",
+          "tasks": [
+            "Fetch HTML with appropriate headers",
+            "Use Readability to extract content",
+            "Extract title, author, date, main text",
+            "Handle paywalls gracefully (error message)",
+            "Extract links from article"
+          ],
+          "acceptance": [
+            "Extracts clean text from most articles",
+            "Handles various site structures",
+            "Returns meaningful error for paywalled content"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-004",
+      "milestone": "M1",
+      "title": "Blog Generator & Output",
+      "priority": "P0",
+      "estimate": "4 hours",
+      "status": "pending",
+      "dependencies": ["PRD-002", "PRD-003"],
+      "stories": [
+        {
+          "id": "S007",
+          "title": "Implement content normalizer",
+          "tasks": [
+            "Transform extracted content to unified format",
+            "Calculate word count and reading time",
+            "Prepare content for LLM processing"
+          ],
+          "acceptance": [
+            "All extractors produce consistent normalized output"
+          ]
+        },
+        {
+          "id": "S008",
+          "title": "Implement LLM blog generation",
+          "tasks": [
+            "Create generation prompt template",
+            "Call Claude API with normalized content",
+            "Parse structured response (title, description, insights, quotes)",
+            "Handle long content (chunking/summarization)"
+          ],
+          "acceptance": [
+            "Generates original title (not copied)",
+            "Produces 2-3 sentence description with perspective",
+            "Extracts 3-5 actionable insights",
+            "Pulls relevant quotes"
+          ]
+        },
+        {
+          "id": "S009",
+          "title": "Implement output formatter",
+          "tasks": [
+            "Create markdown template",
+            "Add embed code to output",
+            "Support file output with auto-naming",
+            "Add source attribution"
+          ],
+          "acceptance": [
+            "Outputs valid markdown",
+            "Embed code renders correctly",
+            "Files saved to specified path"
+          ]
+        },
+        {
+          "id": "S010",
+          "title": "Complete CLI integration",
+          "tasks": [
+            "Wire up all modules in CLI",
+            "Add progress indicators (ora)",
+            "Add --output, --style, --format flags",
+            "Add --extract-only flag",
+            "Colorize output (chalk)"
+          ],
+          "acceptance": [
+            "`shrd <youtube-url>` produces full blog post",
+            "`shrd <article-url>` produces full blog post",
+            "Output saved to file when -o specified"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-005",
+      "milestone": "M2",
+      "title": "Whisper Transcription",
+      "priority": "P1",
+      "estimate": "3 hours",
+      "status": "pending",
+      "dependencies": ["PRD-004"],
+      "stories": [
+        {
+          "id": "S011",
+          "title": "Implement Whisper API integration",
+          "tasks": [
+            "Create transcription service module",
+            "Handle audio file upload to OpenAI",
+            "Support direct URL transcription",
+            "Chunk long audio (>25MB limit)"
+          ],
+          "acceptance": [
+            "Transcribes audio files accurately",
+            "Handles various audio formats",
+            "Properly chunks long audio"
+          ]
+        },
+        {
+          "id": "S012",
+          "title": "Add audio extraction from video",
+          "tasks": [
+            "Use ffmpeg to extract audio track",
+            "Handle temporary file cleanup",
+            "Integrate with YouTube extractor (fallback when no captions)"
+          ],
+          "acceptance": [
+            "Can transcribe YouTube videos without captions",
+            "Temp files cleaned up after processing"
+          ]
+        },
+        {
+          "id": "S013",
+          "title": "Implement podcast extractor",
+          "tasks": [
+            "Detect podcast URLs (MP3, RSS feeds)",
+            "Download audio efficiently",
+            "Transcribe with Whisper",
+            "Extract metadata from RSS/MP3 tags"
+          ],
+          "acceptance": [
+            "Can process direct MP3 URLs",
+            "Can process podcast RSS entries"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-006",
+      "milestone": "M3",
+      "title": "Twitter Extractor",
+      "priority": "P1",
+      "estimate": "2 hours",
+      "status": "pending",
+      "dependencies": ["PRD-004"],
+      "stories": [
+        {
+          "id": "S014",
+          "title": "Implement Twitter/X extraction",
+          "tasks": [
+            "Extract tweet text and thread",
+            "Get media URLs (images, videos)",
+            "Handle retweets and quote tweets",
+            "Generate embed code"
+          ],
+          "acceptance": [
+            "Extracts full thread from URL",
+            "Includes media references",
+            "Embed code works"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-007",
+      "milestone": "M3",
+      "title": "TikTok & Instagram Extractors",
+      "priority": "P1",
+      "estimate": "3 hours",
+      "status": "pending",
+      "dependencies": ["PRD-005"],
+      "stories": [
+        {
+          "id": "S015",
+          "title": "Implement TikTok extraction",
+          "tasks": [
+            "Use yt-dlp for TikTok URLs",
+            "Extract caption and metadata",
+            "Transcribe audio with Whisper",
+            "Generate embed code"
+          ],
+          "acceptance": [
+            "Extracts content from TikTok URLs",
+            "Transcribes spoken content"
+          ]
+        },
+        {
+          "id": "S016",
+          "title": "Implement Instagram extraction",
+          "tasks": [
+            "Support Reels and Posts",
+            "Extract caption",
+            "Transcribe Reels audio with Whisper",
+            "Generate embed code"
+          ],
+          "acceptance": [
+            "Extracts content from Instagram URLs",
+            "Handles both Reels and static posts"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PRD-008",
+      "milestone": "M4",
+      "title": "Web Application",
+      "priority": "P2",
+      "estimate": "8 hours",
+      "status": "future",
+      "dependencies": ["PRD-007"],
+      "stories": [
+        {
+          "id": "S017",
+          "title": "Create shrd.co web app",
+          "tasks": [
+            "Set up Next.js project",
+            "Create simple paste-URL interface",
+            "Display generated blog post",
+            "Add copy-to-clipboard functionality",
+            "Deploy to Vercel"
+          ],
+          "acceptance": [
+            "shrd.co loads and accepts URLs",
+            "Shows generated blog post",
+            "Can copy output easily"
+          ]
+        }
+      ]
+    }
+  ],
+
+  "timeline": {
+    "M0": "Day 1 (2 hours)",
+    "M1": "Day 1-2 (9 hours total)",
+    "M2": "Day 3 (3 hours)",
+    "M3": "Day 4 (5 hours)",
+    "M4": "Week 2 (8 hours)"
+  }
+}
