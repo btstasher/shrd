@@ -19,6 +19,7 @@ export default function RootLayout({
             <div className="flex items-center gap-6">
               <a href="/" className="text-2xl font-bold text-primary">shrd</a>
               <a href="/drafts" className="text-sm text-gray-600 hover:text-gray-900">Drafts</a>
+              <a href="/admin" className="text-sm text-gray-600 hover:text-gray-900">Admin</a>
             </div>
             <span className="text-sm text-gray-500">Drop a link. Get a blog post.</span>
           </div>

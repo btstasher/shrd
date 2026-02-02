@@ -6,15 +6,29 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const targetSite = searchParams.get('site');
   const status = searchParams.get('status');
+  const includeArchived = searchParams.get('includeArchived') === 'true';
+  const includeCollections = searchParams.get('includeCollections') === 'true';
 
   try {
     const drafts = await prisma.draft.findMany({
       where: {
         ...(targetSite && { targetSite }),
         ...(status && { status: status as any }),
+        ...(!includeArchived && !status && { status: { not: 'ARCHIVED' } }),
       },
       orderBy: { createdAt: 'desc' },
-      take: 50,
+      take: 100,
+      ...(includeCollections && {
+        include: {
+          collections: {
+            include: {
+              collection: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+        },
+      }),
     });
 
     return NextResponse.json(drafts);

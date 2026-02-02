@@ -34,6 +34,12 @@ model Draft {
   status      DraftStatus @default(DRAFT)
   publishedAt DateTime?
   publishedUrl String?
+  
+  // Visibility
+  hidden      Boolean  @default(false)
+  
+  // Collections
+  collections DraftCollection[]
 }
 
 enum DraftStatus {
@@ -41,6 +47,29 @@ enum DraftStatus {
   REVIEW
   PUBLISHED
   ARCHIVED
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  name        String
+  slug        String   @unique
+  description String?
+  hidden      Boolean  @default(false)
+  
+  drafts      DraftCollection[]
+}
+
+model DraftCollection {
+  draft        Draft      @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  draftId      String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId String
+  addedAt      DateTime   @default(now())
+
+  @@id([draftId, collectionId])
 }
 
 model Site {
