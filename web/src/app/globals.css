@@ -12,3 +12,46 @@ body {
   background: var(--background);
   font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* Social media embed responsive styles */
+@layer base {
+  /* TikTok embeds */
+  blockquote.tiktok-embed {
+    max-width: 100% !important;
+    min-width: 288px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  @media (max-width: 640px) {
+    blockquote.tiktok-embed {
+      max-width: 325px !important;
+    }
+  }
+  
+  @media (min-width: 641px) {
+    blockquote.tiktok-embed {
+      max-width: 605px !important;
+    }
+  }
+
+  /* Instagram embeds */
+  blockquote.instagram-media {
+    max-width: 100% !important;
+    min-width: 288px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  @media (max-width: 640px) {
+    blockquote.instagram-media {
+      max-width: 328px !important;
+    }
+  }
+  
+  @media (min-width: 641px) {
+    blockquote.instagram-media {
+      max-width: 540px !important;
+    }
+  }
+}

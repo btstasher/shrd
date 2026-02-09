@@ -133,7 +133,7 @@ export default function Home() {
               )}
 
               {/* Embed */}
-              <div className="mt-6" dangerouslySetInnerHTML={{ __html: result.embed }} />
+              <div className="mt-6 flex justify-center w-full" dangerouslySetInnerHTML={{ __html: result.embed }} />
             </div>
           </div>
 
